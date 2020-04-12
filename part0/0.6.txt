@@ -1,0 +1,14 @@
+title new note spa
+
+note over browser:
+user enters text and presses "Save" and
+the browser executes the js-code due to the
+event handler, which adds the note,
+rerenders the notes section in the page
+without reloading, and POSTs the new note to
+the server
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server->browser: status code 201 (created)
+
