@@ -1,63 +1,34 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Button = ({text, handleClick}) => (
-    <button onClick={handleClick}>
-      {text}
-    </button>
+const getRandomAnecdote = () => Math.round(Math.random() * (anecdotes.length - 1))
+
+const Button = ({setSelected}) => (
+  <button onClick={() => setSelected(getRandomAnecdote())}>next anecdote</button>
 )
 
-const Statistic = ({text, value}) => (
-  <tr>
-    <td>{text}</td>
-    <td>{value}</td>
-  </tr>
-)
-
-const Statistics = ({good, neutral, bad}) => {
-  const sum = good + neutral + bad
-  if (sum === 0) {
-    return (
-      <>
-      <h1>statistics</h1>
-      <div>No feedback given</div>
-      </>
-    )
-  }
-  const average = (good*1 + neutral*0 + bad*-1)/sum
-  const positive = good/sum*100
-  return (
-    <>
-      <h1>statistics</h1>
-      <table>
-        <Statistic text={"good"} value={good} />
-        <Statistic text={"neutral"} value={neutral} />
-        <Statistic text={"bad"} value={bad} />
-        <Statistic text={"all"} value={sum} />
-        <Statistic text={"average"} value={average} />
-        <Statistic text={"positive"} value={positive + " %"} />
-      </table>
-    </>
-  )
-}
-
-const App = () => {
-  // save clicks of each button to own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
+const App = (props) => {
+  const [selected, setSelected] = useState(0)
 
   return (
     <div>
-      <h1>give feedback</h1>
-      <Button text="good" handleClick={() => setGood(good + 1)} />
-      <Button text="neutral" handleClick={() => setNeutral(neutral + 1)} />
-      <Button text="bad" handleClick={() => setBad(bad + 1)} />
-      <Statistics good={good} neutral={neutral} bad={bad} />
+      {props.anecdotes[selected]}
+      <br></br>
+      <Button setSelected={setSelected}/>
     </div>
   )
 }
 
-ReactDOM.render(<App />, 
+const anecdotes = [
+  'If it hurts, do it more often',
+  'Adding manpower to a late software project makes it later!',
+  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+  'Premature optimization is the root of all evil.',
+  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+]
+
+ReactDOM.render(
+  <App anecdotes={anecdotes} />,
   document.getElementById('root')
 )
