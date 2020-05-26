@@ -31,7 +31,8 @@ const App = () => {
     }
     const personObject = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons.length
     }
   
     setPersons(persons.concat(personObject))
@@ -44,6 +45,17 @@ const App = () => {
     setNameFilter(event.target.value)
   }
 
+  const deletePerson = (persontoDelete) => {
+    const result = window.confirm(`Delete ${persontoDelete.name} ?`)
+    if (result) {
+      const newPersons = persons.filter(person => person.id !== persontoDelete.id)
+      personsService.deletePerson(persontoDelete)
+      setPersons(newPersons)
+    } else {
+      console.log(`${persontoDelete.name} not removed`)
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -53,7 +65,7 @@ const App = () => {
                   newNumber={newNumber} handleNumberChange={handleNumberChange}
                   addPerson={addPerson} />
       <h2>Numbers</h2>
-      <Persons persons={persons} nameFilter={nameFilter} />
+      <Persons persons={persons} nameFilter={nameFilter} deletePerson={deletePerson} />
     </div>
   )
 }
