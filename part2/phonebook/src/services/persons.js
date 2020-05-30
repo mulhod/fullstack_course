@@ -7,9 +7,14 @@ const getAll = () => {
   return response.then(response => response.data)
 }
 
-const add = (newPerson) => {
-  const request = axios.put(`${url}/${newPerson.id}`, newPerson)
-  return request.then(console.log(`added ${newPerson.name}`))
+const add = (person, newPerson) => {
+  if (newPerson) {
+    const request = axios.post(url, person)
+    return request.then(console.log(`added ${person.name} ${person.id}`))
+  } else {
+    const request = axios.put(`${url}/${person.id}`, person)
+    return request.then(console.log(`updated ${person.name} ${person.id}`))
+  }
 }
 
 const deletePerson = (persontoDelete) => {
