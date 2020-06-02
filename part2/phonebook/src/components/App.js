@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
+import Notification from './Notification'
 import personsService from '../services/persons'
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ nameFilter, setNameFilter] = useState('')
+  const [ notification, setNotification ] = useState(null)
 
   const hook = () => {
     personsService.getAll().then(persons => setPersons(persons))
@@ -50,7 +52,14 @@ const App = () => {
     } else {
       setPersons(persons.concat(personObject))
     }
-    personsService.add(personObject, existingPerson === null)
+    personsService
+      .add(personObject, existingPerson === null)
+      .then(() => {
+        setNotification(`Added/updated ${personObject.name}`)
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000)
+      })
     setNewName('')
     setNewNumber('')
   }
@@ -73,6 +82,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter nameFilter={nameFilter} setFilterName={setFilterName}/>
       <h2>add a new</h2>
       <PersonForm newName={newName} handleNameChange={handleNameChange}
