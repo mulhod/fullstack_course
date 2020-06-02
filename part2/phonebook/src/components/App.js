@@ -11,6 +11,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ nameFilter, setNameFilter] = useState('')
   const [ notification, setNotification ] = useState(null)
+  const [ success, setSuccess ] = useState(false)
 
   const hook = () => {
     personsService.getAll().then(persons => setPersons(persons))
@@ -56,9 +57,20 @@ const App = () => {
       .add(personObject, existingPerson === null)
       .then(() => {
         setNotification(`Added/updated ${personObject.name}`)
+        setSuccess(true)
+        setTimeout(() => {
+          setNotification(null)
+          setSuccess(false)
+        }, 3000)
+      })
+      .catch(error => {
+        setNotification(
+          `Information from ${personObject.name} has already been removed from the server`
+        )
         setTimeout(() => {
           setNotification(null)
         }, 3000)
+        setPersons(persons.filter(person => person.id !== personObject.id))
       })
     setNewName('')
     setNewNumber('')
@@ -73,6 +85,23 @@ const App = () => {
     if (result) {
       const newPersons = persons.filter(person => person.id !== persontoDelete.id)
       personsService.deletePerson(persontoDelete)
+      .then(() => {
+        setNotification(`Deleted ${persontoDelete.name}`)
+        setSuccess(true)
+        setTimeout(() => {
+          setNotification(null)
+          setSuccess(false)
+        }, 3000)
+      })
+      .catch(error => {
+        setNotification(
+          `Information from ${personToDelete.name} has already been removed from the server`
+        )
+        setTimeout(() => {
+          setNotification(null)
+        }, 3000)
+        setPersons(persons.filter(person => person.id !== persontoDelete.id))
+      })
       setPersons(newPersons)
     } else {
       console.log(`${persontoDelete.name} not removed`)
@@ -82,7 +111,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification message={notification} success={success} />
       <Filter nameFilter={nameFilter} setFilterName={setFilterName}/>
       <h2>add a new</h2>
       <PersonForm newName={newName} handleNameChange={handleNameChange}

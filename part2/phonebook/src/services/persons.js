@@ -8,13 +8,16 @@ const getAll = () => {
 }
 
 const add = (person, newPerson) => {
+  let message = null
+  let request = null
   if (newPerson) {
-    const request = axios.post(url, person)
-    return request.then(console.log(`added ${person.name} ${person.id}`))
+    request = axios.post(url, person)
+    message = `added ${person.name} ${person.id}`
   } else {
-    const request = axios.put(`${url}/${person.id}`, person)
-    return request.then(console.log(`updated ${person.name} ${person.id}`))
+    request = axios.put(`${url}/${person.id}`, person)
+    message = `updated ${person.name} ${person.id}`
   }
+  return request.then(console.log(message))
 }
 
 const deletePerson = (persontoDelete) => {
