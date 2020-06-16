@@ -68,6 +68,12 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
+  if (persons.map(p => p.name).includes(body.name)) {
+    return response.status(400).json({
+      error: `${body.name} already exists!`
+    })
+  }
+
   const person = {
     name: body.name,
     number: body.number,
