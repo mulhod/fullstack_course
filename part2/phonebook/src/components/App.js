@@ -80,13 +80,13 @@ const App = () => {
     setNameFilter(event.target.value)
   }
 
-  const deletePerson = (persontoDelete) => {
-    const result = window.confirm(`Delete ${persontoDelete.name} ?`)
+  const deletePerson = (personToDelete) => {
+    const result = window.confirm(`Delete ${personToDelete.name} ?`)
     if (result) {
-      const newPersons = persons.filter(person => person.id !== persontoDelete.id)
-      personsService.deletePerson(persontoDelete)
+      const newPersons = persons.filter(person => person.id !== personToDelete.id)
+      personsService.deletePerson(personToDelete)
       .then(() => {
-        setNotification(`Deleted ${persontoDelete.name}`)
+        setNotification(`Deleted ${personToDelete.name}`)
         setSuccess(true)
         setTimeout(() => {
           setNotification(null)
@@ -100,11 +100,11 @@ const App = () => {
         setTimeout(() => {
           setNotification(null)
         }, 3000)
-        setPersons(persons.filter(person => person.id !== persontoDelete.id))
+        setPersons(persons.filter(person => person.id !== personToDelete.id))
       })
       setPersons(newPersons)
     } else {
-      console.log(`${persontoDelete.name} not removed`)
+      console.log(`${personToDelete.name} not removed`)
     }
   }
 
